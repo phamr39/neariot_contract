@@ -1,13 +1,15 @@
+#[path = "./storage/cluster.storage.rs"]
+mod ClusterStorage;
+
+#[path = "./model/cluster.model.rs"]
+mod ClusterModel;
+
+
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::LookupMap;
 use near_sdk::{env, near_bindgen};
 
 near_sdk::setup_alloc!();
-
-#[near_bindgen]
-pub struct SetValue {
-    
-}
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
@@ -33,6 +35,17 @@ impl StatusMessage {
     pub fn get_status(&self, account_id: String) -> Option<String> {
         return self.records.get(&account_id);
     }
+
+    pub fn set_data(&mut self, id: String, data: String) -> String {
+        let mut cluster = ClusterStorage::default();
+        cluster::set_data(&id, &data);
+        return String::from("Hello, world!");
+    } 
+
+    pub fn get_data(&mut self, id: String, data: String) -> ClusterModel {
+        let mut cluster = ClusterStorage::default();
+        return cluster::get_data(&id);
+    } 
 }
 
 #[cfg(not(target_arch = "wasm32"))]

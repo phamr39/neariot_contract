@@ -1,3 +1,6 @@
+#[path = "../storage/cluster.storage.rs"]
+mod ClusterStorage;
+
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::UnorderedMap;
 use near_sdk::{env, near_bindgen};
@@ -5,25 +8,25 @@ use near_sdk::{env, near_bindgen};
 near_sdk::setup_alloc!();
 
 #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize)]
-pub struct UserStorageModel {
-    records: UnorderedMap<String, String>,
-    owner: '',
-    id: '',
-    apiKey: '',
+pub struct ClusterModel {
+    storage: ClusterStorage,
+    owner: String,
+    id: String,
+    api_key: String,
+    data: String,
 }
 
-impl Default for UserStorageModel {
+impl Default for ClusterModel {
 
     fn default() -> Self {
         let account_id: String = env::signer_account_id();
         let id: String = generateId(&account_id);
-        let apiKey: String = generateApiKey(&id);
+        let api_key: String = generateApiKey(&id);
+        let data: String = '';
         Self {
-            records: UnorderedMap::new(b"StgM".to_vec()),
             owner: &account_id,
             id: &id,
-            apiKey: &apiKey,
+            api_key: &api_key,
         }
     }
 
@@ -41,10 +44,10 @@ impl Default for UserStorageModel {
 }
 
 #[near_bindgen]
-impl UserStorageModel {
+impl ClusterModel {
     pub fn set_data(&mut self, data: String) {
-        // let account_id = env::signer_account_id();
-        self.records.insert(&self.id, &data);
+        self.data = &data;
+        
     }
 
     pub fn get_data(&mut self) {
@@ -53,5 +56,9 @@ impl UserStorageModel {
 
     pub fn get_apiKey() {
 
+    }
+
+    pub fn save() {
+        let mut storage = ClusterStorage::default();
     }
 }
