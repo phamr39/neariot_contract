@@ -5,6 +5,11 @@ use near_sdk::{env, near_bindgen};
 near_sdk::setup_alloc!();
 
 #[near_bindgen]
+pub struct SetValue {
+    
+}
+
+#[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize)]
 pub struct StatusMessage {
     records: LookupMap<String, String>,
