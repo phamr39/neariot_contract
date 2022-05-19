@@ -89,26 +89,18 @@ impl Contract {
         return self.records.get(&account_id);
     }
 
-    pub fn new_cluster(&mut self, name: String, descriptions: String) -> Cluster {
-        let cluster: Cluster = Cluster::new(name, descriptions);
-        return match self.clusters_storage.get(&cluster.id) {
-            Some(cluster) => cluster,
-            _ => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
-        }
-    }
+    // pub fn new_cluster(&mut self, name: String, descriptions: String) -> Cluster {
+    //     let cluster: Cluster = Cluster::new(name, descriptions);
+    //     return match self.clusters_storage.get(&cluster.id) {
+    //         Some(cluster) => cluster,
+    //         _ => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
+    //     }
+    // }
 
-    pub fn get_cluster(&mut self, id: String) -> Cluster {
-        return self.clusters_storage.get(&id).unwrap();
-    }
+    // pub fn get_cluster(&mut self, id: String) -> Cluster {
+    //     return self.clusters_storage.get(&id).unwrap();
+    // }
 
-    // pub fn set_data(&mut self, id: String, data: String) -> String {
-    //     self.storage.insert(&id, &data);
-    //     return String::from("Hello, world!");
-    // } 
-
-    // pub fn get_data(&mut self, id: String) -> Option<String> {
-    //     return self.storage.get(&id);
-    // } 
 }
 
 // #[cfg(not(target_arch = "wasm32"))]
