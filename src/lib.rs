@@ -47,7 +47,6 @@ impl Cluster {
         self.data = data;
         return self;
     }
-
 }
 
 // ------------------------------
@@ -79,6 +78,7 @@ impl Default for Contract {
 }
 
 #[near_bindgen]
+#[allow(unused_variables)]
 impl Contract {
     pub fn set_status(&mut self, message: String) {
         let account_id = env::signer_account_id();
@@ -89,18 +89,24 @@ impl Contract {
         return self.records.get(&account_id);
     }
 
-    pub fn new_cluster(&mut self, name: String, descriptions: String) -> Cluster {
+    pub fn new_cluster(&mut self, name: String, descriptions: String) -> String {
         let cluster: Cluster = Cluster::new(name, descriptions);
-        return match self.clusters_storage.get(&cluster.id) {
-            Some(cluster) => cluster,
-            None => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
+        let is_existed = match self.clusters_storage.get(&cluster.id) {
+            Some(cluster) => true,
+            None => false,
+        };
+
+        if is_existed == false {
+            self.clusters_storage.insert(&cluster.id, &cluster);
+            return cluster.id;
+        } else {
+            return String::from("Existed");
         }
     }
 
     pub fn get_cluster(&mut self, id: String) -> Cluster {
         return self.clusters_storage.get(&id).unwrap();
     }
-
 }
 
 // #[cfg(not(target_arch = "wasm32"))]
