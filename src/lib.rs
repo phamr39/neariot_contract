@@ -2,11 +2,12 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::LookupMap;
 use near_sdk::collections::UnorderedMap;
 use near_sdk::{env, near_bindgen};
+use serde::Serialize;
 near_sdk::setup_alloc!();
 
 // ------------------------------
 // #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize, Default)]
+#[derive(BorshDeserialize, BorshSerialize, Default, Serialize)]
 pub struct Cluster {
     owner: String,
     name: String,
@@ -51,7 +52,7 @@ impl Cluster {
 
 // ------------------------------
 
-#[derive(BorshDeserialize, BorshSerialize, Default)]
+#[derive(BorshDeserialize, BorshSerialize, Default, Serialize)]
 pub struct User {
     id: String,
     clusters: Vec<String>,
@@ -88,12 +89,16 @@ impl Contract {
         return self.records.get(&account_id);
     }
 
-    pub fn new_cluster(&self, name: String, descriptions: String) -> Cluster {
+    pub fn new_cluster(&mut self, name: String, descriptions: String) -> Cluster {
         let cluster: Cluster = Cluster::new(name, descriptions);
         return match self.clusters_storage.get(&cluster.id) {
-            Some(cluster) => *&cluster,
+            Some(cluster) => cluster,
             _ => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
         }
+    }
+
+    pub fn get_cluster(&mut self, id: String) -> Cluster {
+        return self.clusters_storage.get(&id).unwrap();
     }
 
     // pub fn set_data(&mut self, id: String, data: String) -> String {

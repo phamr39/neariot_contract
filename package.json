@@ -1,12 +1,12 @@
 {
-  "name": "rust-status-message-builder",
+  "name": "neariot_contract",
   "version": "1.0.0",
   "description": "Compiles NEAR Protocol example of setting and retrieving a status message per NEAR account",
   "scripts": {
     "build": "rustup target add wasm32-unknown-unknown && cargo build --target wasm32-unknown-unknown --release",
     "build:web": "parcel build ./frontend/index.html --public-url ./ --no-minify",
-    "postbuild": "cp ./target/wasm32-unknown-unknown/release/status_message.wasm ./res/",
-    "deploy:dev": "npm run build && near dev-deploy res/status_message.wasm",
+    "postbuild": "cp ./target/wasm32-unknown-unknown/release/neariot_contract.wasm ./res/",
+    "deploy:dev": "npm run build && near dev-deploy res/neariot_contract.wasm",
     "dev": "npm run deploy:dev && npm start",
     "start": "npm run build && npm run build:web && env-cmd -f ./neardev/dev-account.env parcel ./frontend/index.html",
     "test": "npm run test:unit && npm run test:integration",
@@ -25,7 +25,7 @@
     "rust",
     "smart-contract"
   ],
-  "author": "Mike Purvis",
+  "author": "Neariot",
   "license": "(MIT AND Apache-2.0)",
   "bugs": {
     "url": "https://github.com/near-examples/rust-status-message/issues"

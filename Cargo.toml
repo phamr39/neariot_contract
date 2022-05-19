@@ -1,8 +1,8 @@
 [package]
-name = "status-message"
+name = "neariot.testnet"
 version = "0.1.0"
-authors = ["Near Inc <hello@nearprotocol.com>"]
-edition = "2018"
+authors = ["Neariot"]
+edition = "2022"
 
 [lib]
 crate-type = ["cdylib", "rlib"]
