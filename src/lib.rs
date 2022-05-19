@@ -7,7 +7,7 @@ near_sdk::setup_alloc!();
 
 // ------------------------------
 // #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize, Default, Serialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize)]
 pub struct Cluster {
     owner: String,
     name: String,
@@ -52,12 +52,12 @@ impl Cluster {
 
 // ------------------------------
 
-#[derive(BorshDeserialize, BorshSerialize, Default, Serialize)]
-pub struct User {
-    id: String,
-    clusters: Vec<String>,
-    project: Vec<String>,
-}
+// #[derive(BorshDeserialize, BorshSerialize, Default, Serialize)]
+// pub struct User {
+//     id: String,
+//     clusters: Vec<String>,
+//     project: Vec<String>,
+// }
 // ------------------------------
 
 #[near_bindgen]
@@ -65,7 +65,7 @@ pub struct User {
 pub struct Contract {
     records: LookupMap<String, String>,
     clusters_storage: UnorderedMap<String, Cluster>,
-    users_storage: UnorderedMap<String, User>,
+    // users_storage: UnorderedMap<String, User>,
 }
 
 impl Default for Contract {
@@ -73,7 +73,7 @@ impl Default for Contract {
         Self {
             records: LookupMap::new(b"r".to_vec()),
             clusters_storage: UnorderedMap::new(b"cS".to_vec()),
-            users_storage: UnorderedMap::new(b"uS".to_vec()),
+            // users_storage: UnorderedMap::new(b"uS".to_vec()),
         }
     }
 }
@@ -89,17 +89,17 @@ impl Contract {
         return self.records.get(&account_id);
     }
 
-    // pub fn new_cluster(&mut self, name: String, descriptions: String) -> Cluster {
-    //     let cluster: Cluster = Cluster::new(name, descriptions);
-    //     return match self.clusters_storage.get(&cluster.id) {
-    //         Some(cluster) => cluster,
-    //         _ => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
-    //     }
-    // }
+    pub fn new_cluster(&mut self, name: String, descriptions: String) -> Option<&Cluster> {
+        let cluster: Cluster = Cluster::new(name, descriptions);
+        return match self.clusters_storage.get(&cluster.id) {
+            Some(cluster) => cluster,
+            _ => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
+        }
+    }
 
-    // pub fn get_cluster(&mut self, id: String) -> Cluster {
-    //     return self.clusters_storage.get(&id).unwrap();
-    // }
+    pub fn get_cluster(&mut self, id: String) -> Cluster {
+        return self.clusters_storage.get(&id).unwrap();
+    }
 
 }
 

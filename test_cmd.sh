@@ -1,4 +1,4 @@
-near deploy --wasmFile res/status_message.wasm --accountId neariot.testnet
+near deploy --wasmFile res/neariot_contract.wasm --accountId neariot.testnet
 
 near call neariot.testnet new_cluster '{"name": "aloha", "descriptions": "Hello World"}' --accountId neariot.testnet
 
