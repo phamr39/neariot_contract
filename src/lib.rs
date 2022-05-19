@@ -89,11 +89,11 @@ impl Contract {
         return self.records.get(&account_id);
     }
 
-    pub fn new_cluster(&mut self, name: String, descriptions: String) -> Option<&Cluster> {
+    pub fn new_cluster(&mut self, name: String, descriptions: String) -> Cluster {
         let cluster: Cluster = Cluster::new(name, descriptions);
         return match self.clusters_storage.get(&cluster.id) {
             Some(cluster) => cluster,
-            _ => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
+            None => self.clusters_storage.insert(&cluster.id, &cluster).unwrap(),
         }
     }
 
