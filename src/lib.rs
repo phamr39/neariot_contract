@@ -77,6 +77,7 @@ impl Default for Contract {
         Self {
             records: LookupMap::new(b"r".to_vec()),
             clusters_storage: UnorderedMap::new(b"cS".to_vec()),
+            // cluste: UnorderedMap::new(b"cS".to_vec()),
             // users_storage: UnorderedMap::new(b"uS".to_vec()),
         }
     }
@@ -123,13 +124,19 @@ impl Contract {
         let cluster = self.clusters_storage.get(&id).unwrap();
         let owner = &cluster.owner;
         let sender = &env::signer_account_id();
-        
+
         if owner == sender {
             return cluster;
         } else {
             panic!("Can not get Cluster"); 
         }
     }
+
+    pub fn get_num_cluster(&mut self, user_id: String) -> i32 {
+
+    }
+
+    // pub fun get_clusters(&mut self, user_id: String) -> 
 
     pub fn get_api_key(&mut self, id: String) -> String {
         let cluster: Cluster = self.clusters_storage.get(&id).unwrap();

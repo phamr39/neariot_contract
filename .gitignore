@@ -5,7 +5,7 @@ target
 dist
 *.lock
 package-lock.json
-res/**
+# res/**
 
 # IDE
 .idea
