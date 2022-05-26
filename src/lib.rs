@@ -2,12 +2,13 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::LookupMap;
 use near_sdk::collections::UnorderedMap;
 use near_sdk::{env, near_bindgen};
+use near_sdk::json_types::Base64VecU8;
 use serde::Serialize;
 near_sdk::setup_alloc!();
 
 // ------------------------------
 // #[near_bindgen]
-#[derive(BorshDeserialize, BorshSerialize, Serialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Clone)]
 pub struct Cluster {
     owner: String,
     name: String,
@@ -20,11 +21,15 @@ pub struct Cluster {
 impl Cluster {
     fn generate_id() -> String {
         let account_id = env::signer_account_id();
-        let mut output = account_id.to_owned();
-        output.push_str("_");
-        output.push_str(&(&env::block_timestamp().to_string()));
-        // let decoded = bs58::decode(&output).into_vec()?;
-        return output;
+        let mut raw_id = account_id.to_owned();
+        raw_id.push_str("_");
+        raw_id.push_str(&(&env::block_timestamp().to_string()));
+        let u8_id = raw_id.as_bytes();
+        let vec_id: Vec<u8> = u8_id.iter().cloned().collect();
+        let encode: Base64VecU8 = <Base64VecU8 as From<Vec<u8>>>::from(vec_id);
+        let enc_vec = <Base64VecU8 as From<Base64VecU8>>::from(encode);
+        let enc_str: String = serde_json::to_string(&enc_vec).unwrap().replace('"', "");
+        return enc_str;
     }
 
     fn generate_api_key() -> String {
@@ -77,6 +82,16 @@ impl Default for Contract {
     }
 }
 
+pub enum Response<T> {
+    None,
+    Some(T),
+}
+
+pub enum ClusterResponse {
+    Cluster(Cluster),
+    Error(String),
+}
+
 #[near_bindgen]
 #[allow(unused_variables)]
 impl Contract {
@@ -105,7 +120,20 @@ impl Contract {
     }
 
     pub fn get_cluster(&mut self, id: String) -> Cluster {
-        return self.clusters_storage.get(&id).unwrap();
+        let cluster = self.clusters_storage.get(&id).unwrap();
+        let owner = &cluster.owner;
+        let sender = &env::signer_account_id();
+        
+        if owner == sender {
+            return cluster;
+        } else {
+            panic!("Can not get Cluster"); 
+        }
+    }
+
+    pub fn get_api_key(&mut self, id: String) -> String {
+        let cluster: Cluster = self.clusters_storage.get(&id).unwrap();
+        return cluster.api_key;
     }
 }
 

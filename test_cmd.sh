@@ -8,3 +8,4 @@ near call neariot.testnet get_cluster '{"id": "neariot.testnet_16529529600775872
 
 
 neariot_test1.testnet
+
