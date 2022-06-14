@@ -6,15 +6,13 @@ use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
 use near_sdk::collections::{LookupMap, UnorderedMap, UnorderedSet};
 use near_sdk::serde::{Deserialize, Serialize};
 use near_sdk::{
-    env, near_bindgen, setup_alloc, AccountId, Balance, BorshStorageKey, Gas, PanicOnDefault,
+    env, near_bindgen, AccountId, Balance, BorshStorageKey, PanicOnDefault,
 };
 
 mod actions_of_cluster;
 mod cluster;
 mod constants;
 mod utils;
-
-setup_alloc!();
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]

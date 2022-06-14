@@ -3,7 +3,7 @@ use crate::*;
 
 pub fn gen_cluster_id() -> ClusterId {
     let account_id = env::signer_account_id();
-    let mut raw_id = account_id.to_owned();
+    let mut raw_id = account_id.to_owned().to_string();
     raw_id.push_str("_");
     raw_id.push_str(&(&env::block_timestamp().to_string()));
     let u8_id = raw_id.as_bytes();
@@ -12,9 +12,4 @@ pub fn gen_cluster_id() -> ClusterId {
     let enc_vec = <Base64VecU8 as From<Base64VecU8>>::from(encode);
     let enc_str: String = serde_json::to_string(&enc_vec).unwrap().replace('"', "");
     return enc_str;
-}
-
-pub fn generate_api_key() -> String {
-    // let id = env::signer_account_id();
-    return String::from("2g8g3gd8g27g332dh3g78732dg328g327ug3d2");
 }
