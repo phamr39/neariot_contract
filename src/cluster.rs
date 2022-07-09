@@ -1,6 +1,6 @@
 use crate::*;
 
-#[derive(BorshDeserialize, BorshSerialize,Serialize, Deserialize)]
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize)]
 #[serde(crate = "near_sdk::serde")]
 pub struct Cluster {
     pub owner_id: AccountId,
@@ -49,13 +49,10 @@ impl Contract {
             .collect();
     }
 
-    pub fn get_cluster(&mut self, id:String) -> Cluster{
-        let cluster = self.cluster.get(&id);  
+    pub fn get_cluster(&mut self, id: String) -> Cluster {
+        let cluster = self.cluster.get(&id);
 
-        assert!(
-            cluster.is_some(),
-            "Cluster is not exist!"
-        );
+        assert!(cluster.is_some(), "Cluster is not exist!");
 
         assert!(
             cluster.as_ref().unwrap().owner_id.to_string() == env::signer_account_id().to_string(),
@@ -63,47 +60,77 @@ impl Contract {
         );
 
         return cluster.unwrap();
-        
     }
 
-    pub fn get_apikey_hash(&mut self, id:String) -> String{
-        let cluster = self.cluster.get(&id);  
+    pub fn set_cluster(
+        &mut self,
+        id: String,
+        name: String,
+        description: String,
+    ) -> ClusterMetaData {
+        let cluster = self.cluster.get(&id);
 
-        assert!(
-            cluster.is_some(),
-            "Cluster is not exist!"
-        );
-
-        return self.cluster_metadata.get(&id).unwrap().apikey_hash;
-        
-    }
-
-    pub fn set_apikey_hash(&mut self, id:String, apikey_hash: String) -> ClusterMetaData{
-        let cluster = self.cluster.get(&id);  
-
-        assert!(
-            cluster.is_some(),
-            "Cluster is not exist!"
-        );
+        assert!(cluster.is_some(), "Cluster is not exist!");
 
         assert!(
             cluster.as_ref().unwrap().owner_id.to_string() == env::signer_account_id().to_string(),
             "This cluster is not belong to you"
         );
 
-        let mut metadata =  self.cluster_metadata.get(&id).unwrap();
+        let mut metadata = self.cluster_metadata.get(&id).unwrap();
+        metadata.name = name;
+        metadata.description = description;
+        self.cluster_metadata.insert(&id, &metadata);
+        return metadata;
+    }
+
+    pub fn remove_cluster(&mut self, id: String) -> String {
+        let cluster = self.cluster.get(&id);
+        let owner = env::signer_account_id();
+
+        assert!(cluster.is_some(), "Cluster is not exist!");
+
+        assert!(
+            cluster.as_ref().unwrap().owner_id.to_string() == env::signer_account_id().to_string(),
+            "This cluster is not belong to you"
+        );
+        self.cluster.remove(&id);
+        self.cluster_metadata.remove(&id);
+        let mut clusters_for_owner_set = self.cluster_per_owner.get(&owner).unwrap();
+        clusters_for_owner_set.remove(&id);
+        self.cluster_per_owner
+            .insert(&owner, &clusters_for_owner_set);
+        return String::from("Successfull");
+    }
+
+    pub fn get_apikey_hash(&mut self, id: String) -> String {
+        let cluster = self.cluster.get(&id);
+
+        assert!(cluster.is_some(), "Cluster is not exist!");
+
+        return self.cluster_metadata.get(&id).unwrap().apikey_hash;
+    }
+
+    pub fn set_apikey_hash(&mut self, id: String, apikey_hash: String) -> ClusterMetaData {
+        let cluster = self.cluster.get(&id);
+
+        assert!(cluster.is_some(), "Cluster is not exist!");
+
+        assert!(
+            cluster.as_ref().unwrap().owner_id.to_string() == env::signer_account_id().to_string(),
+            "This cluster is not belong to you"
+        );
+
+        let mut metadata = self.cluster_metadata.get(&id).unwrap();
         metadata.apikey_hash = apikey_hash;
         self.cluster_metadata.insert(&id, &metadata);
         return metadata;
     }
 
-    pub fn get_cluster_data(&mut self, id:String) -> ClusterMetaData{
-        let cluster = self.cluster.get(&id);  
+    pub fn get_cluster_data(&mut self, id: String) -> ClusterMetaData {
+        let cluster = self.cluster.get(&id);
 
-        assert!(
-            cluster.is_some(),
-            "Cluster is not exist!"
-        );
+        assert!(cluster.is_some(), "Cluster is not exist!");
 
         assert!(
             cluster.as_ref().unwrap().owner_id.to_string() == env::signer_account_id().to_string(),
@@ -111,6 +138,5 @@ impl Contract {
         );
 
         return self.cluster_metadata.get(&id).unwrap();
-        
     }
 }
