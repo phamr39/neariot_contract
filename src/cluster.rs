@@ -15,6 +15,8 @@ pub struct ClusterMetaData {
     pub description: String,
     pub apikey_hash: String,
     pub data: String,
+    pub create_at:u64,
+    pub update_at:u64,
 }
 
 impl ClusterMetaData {
@@ -26,6 +28,8 @@ impl ClusterMetaData {
             description: description,
             apikey_hash: String::from(""),
             data: String::from(""),
+            create_at:env::block_timestamp(),
+            update_at:env::block_timestamp(),
         }
     }
 }
