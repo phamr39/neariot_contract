@@ -4,6 +4,8 @@ use near_sdk::{Gas};
 pub const DEFAULT_GAS_FEE: Gas = Gas(20_000_000_000_000);
 pub const NEAR_DECIMAL: Balance = 1_000_000_000_000_000_000_000_000;
 pub type ClusterId = String;
+pub type ProjectId = String;
+pub type OfferId = String;
 
 #[derive(BorshStorageKey, BorshSerialize)]
 pub(crate) enum StorageKey {
@@ -11,4 +13,6 @@ pub(crate) enum StorageKey {
     Cluster,
     ClusterMetadata,
     ClusterPerOwnerInner { id: AccountId },
+    Project,
+    User,
 }

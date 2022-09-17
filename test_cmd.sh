@@ -6,8 +6,8 @@ near call neariot.testnet new_cluster '{"name":"aloha","description":"Hello Worl
 
 near call neariot.testnet get_clusters --accountId neariot.testnet
 
-near call neariot.testnet get_cluster '{"id":"bmVhcmlvdC50ZXN0bmV0XzE2NTUyMTg5NzI1OTM1NDUyODU="}' --accountId neariot.testnet
+near call neariot.testnet get_cluster '{"id":"bmVhcmlvdC50ZXN0bmV0XzE2NTg1NzE0NDUyODc1MTc4Mzc="}' --accountId neariot.testnet
 
-near call neariot.testnet get_cluster_data '{"id":"bmVhcmlvdC50ZXN0bmV0XzE2NTUyMTg5NzI1OTM1NDUyODU="}' --accountId neariot.testnet
+near call neariot.testnet get_cluster_data '{"id":"bmVhcmlvdC50ZXN0bmV0XzE2NTg1NzE0NDUyODc1MTc4Mzc="}' --accountId neariot.testnet
 
 near call neariot.testnet set_apikey_hash '{"id":"bmVhcmlvdC50ZXN0bmV0XzE2NTUyMTg5NzI1OTM1NDUyODU=", "apikey_hash":"Abchasdasjkjl"}' --accountId neariot.testnet

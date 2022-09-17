@@ -1,5 +1,6 @@
 pub use crate::actions_of_cluster::*;
 pub use crate::cluster::*;
+pub use crate::sandbox::*;
 pub use crate::constants::*;
 pub use crate::utils::*;
 use near_sdk::borsh::{self, BorshDeserialize, BorshSerialize};
@@ -13,6 +14,7 @@ mod actions_of_cluster;
 mod cluster;
 mod constants;
 mod utils;
+mod sandbox;
 
 #[near_bindgen]
 #[derive(BorshDeserialize, BorshSerialize, PanicOnDefault)]
@@ -21,6 +23,8 @@ pub struct Contract {
     pub cluster_per_owner: LookupMap<AccountId, UnorderedSet<ClusterId>>,
     pub cluster: LookupMap<ClusterId, Cluster>,
     pub cluster_metadata: UnorderedMap<ClusterId, ClusterMetaData>,
+    pub projects: UnorderedMap<ProjectId, Project>,
+    pub users: UnorderedMap<AccountId, ProjectUser>,
 }
 
 #[near_bindgen]
@@ -32,6 +36,8 @@ impl Contract {
             cluster_per_owner: LookupMap::new(StorageKey::ClusterPerOwner),
             cluster: LookupMap::new(StorageKey::Cluster),
             cluster_metadata: UnorderedMap::new(StorageKey::ClusterMetadata),
+            projects: UnorderedMap::new(StorageKey::Project),
+            users: UnorderedMap::new(StorageKey::User),
         }
     }
 }
