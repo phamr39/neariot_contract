@@ -1,4 +1,4 @@
-yarn build && near deploy --wasmFile res/neariot_contract.wasm --accountId ciuz.testnet
+ommityarn build && near deploy --wasmFile res/neariot_contract.wasm --accountId ciuz.testnet
 
 near call ciuz.testnet new "{}" --accountId ciuz.testnet
 
