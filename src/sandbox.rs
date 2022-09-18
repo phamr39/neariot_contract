@@ -26,6 +26,28 @@ impl Offer {
 
 #[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Debug, Clone)]
 #[serde(crate = "near_sdk::serde")]
+pub struct BoughtOffer {
+    pub id: String,
+    pub created_at: u64,
+    pub metadata: String,
+    pub buyer: AccountId,
+    pub rate: u32,
+}
+
+impl BoughtOffer {
+    pub fn new(id: String, metadata: String, buyer: AccountId) -> Self {
+        Self {
+            id: id,
+            created_at: env::block_timestamp(),
+            metadata: metadata,
+            buyer: buyer,
+            rate: 0,
+        }
+    }
+}
+
+#[derive(BorshDeserialize, BorshSerialize, Serialize, Deserialize, Debug, Clone)]
+#[serde(crate = "near_sdk::serde")]
 pub struct Project {
     pub owner: AccountId,
     pub id: ProjectId,
@@ -41,6 +63,7 @@ pub struct Project {
     pub total_offers_bought: u32,     // Total offers bought
     pub total_offers_completed: u32,  // Total offers completed
     pub total_offers_cancled: u32,    // Total offers cancled
+    pub bought_offers: Vec<BoughtOffer>,
 }
 
 impl Project {
@@ -59,6 +82,7 @@ impl Project {
             total_offers_bought: 0,
             total_offers_completed: 0,
             total_offers_cancled: 0,
+            bought_offers: vec![],
         }
     }
 }
@@ -198,6 +222,20 @@ impl Contract {
         return project_data.offers;
     }
 
+    // Update project metadata
+    pub fn update_project(&mut self, id: ProjectId, metadata: String) -> Project {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let mut project_data = project.unwrap();
+        assert!(
+            project_data.owner != env::signer_account_id(),
+            "You are not the owner of this project!"
+        );
+        project_data.metadata = metadata;
+        self.projects.insert(&id, &project_data);
+        return project_data;
+    }
+
     // Buy Offer
     #[payable]
     pub fn buy_offer(&mut self, project_id: ProjectId, offer_id: String) {
@@ -247,10 +285,74 @@ impl Contract {
         let project_owner = project_data.owner.clone();
         Promise::new(project_owner).transfer(offer.price * (100 - INVESTOR_PROTECT_PERCENT) / 100);
         // Update Project Info
+        let bought_offer = BoughtOffer::new(offer_id, String::from(""), env::signer_account_id());
+        project_data.bought_offers.push(bought_offer);
+        project_data.pledgers.push(env::signer_account_id());
         project_data.total_pledge += offer.price;
         project_data.total_pledge_locked += offer.price * INVESTOR_PROTECT_PERCENT / 100;
         project_data.total_offers_bought += 1;
         project_data.offers = offers;
         self.projects.insert(&project_id, &project_data);
+    } 
+
+    // Approve Project, Release all money to project owner
+    pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let mut project_data = project.unwrap();
+        assert!(
+            project_data.owner == env::signer_account_id(),
+            "You are the owner of this project!"
+        );
+        // Get offer Information
+        // Check if project sender is pledged to this project
+        let user = self.users.get(&env::signer_account_id());
+        assert!(user.is_some(), "User is not exist!");
+        let user_data = user.unwrap();
+        let mut index = 0;
+        for data in project_data.bought_offers.iter() {
+            if data.buyer == user_data.id {
+                break;
+            }
+            index += 1;
+        }
+        // Update Bought offer and project Rate
+        let mut bought_offer = project_data.bought_offers.get(index).unwrap().clone();
+        bought_offer.rate = rate;
+        bought_offer.metadata = metadata;
+        project_data.bought_offers[index] = bought_offer.clone();
+        // Calculate rate for project 
+        let mut total_rate = 0;
+        for offer in project_data.bought_offers.iter() {
+            total_rate += offer.rate;
+        }
+        project_data.avg_rate = total_rate / project_data.bought_offers.len() as u32;
+        // Get Offer Information
+        let offers = project_data.offers.clone();
+        let mut index = 0;
+        for offer in offers.iter() {
+            if offer.id == bought_offer.id {
+                break;
+            }
+            index += 1;
+        }
+        if index >= offers.len() {
+            // Offer is exist in Bought offer but not exist in Offer
+            assert!(true, "SB0001, Something went wrong!");
+        }
+        // Calculate money for project owner
+        let offer = offers.get(index).unwrap();
+        let money = offer.price * (INVESTOR_PROTECT_PERCENT - OFFER_FEES_PERCENT) / 100;
+        // Release remaining money to project
+        let project_owner = project_data.owner.clone();
+        Promise::new(project_owner).transfer(money);
+        // Update Project Infor
+        self.projects.insert(&id, &project_data);
     }
+
+    // Reject Project, Cashback remain money to pledger
+
+    // Add Project to watchlist
+
+    // Get all bought offers of a project
 }

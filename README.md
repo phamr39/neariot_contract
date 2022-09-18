@@ -225,7 +225,15 @@ pub fn add_project_offer(
 ```rs
 pub fn remove_project_offer(&mut self, id: ProjectId, offer_id: String) -> Vec<Offer>
 ```
+- Update project metadata
+```rs
+pub fn update_project(&mut self, id: ProjectId, metadata: String) -> Project
+```
 - Buy Offer
 ```rs
 pub fn buy_offer(&mut self, project_id: ProjectId, offer_id: String) -> Void
+```
+- Approve Project, Release all money to project owner
+```rs
+pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> Project
 ```
