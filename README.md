@@ -196,23 +196,23 @@ cargo test --package status-message -- --nocapture
 # Contract Method
 
 - Get User Information by AccountId
-``rs
+```rs
 pub fn get_user(&mut self, user_id: AccountId) -> ProjectUser
 ```
 - Get Project Information by ProjectId
-``rs
+```rs
 pub fn get_project(&mut self, id: ProjectId) -> Project
 ```
 - Get Project Information by Creator AccountId
-``rs
+```rs
 pub fn get_user_projects_created(&mut self, id: AccountId) -> Project
 ```
 - Create Project. Each user can only create one project
-``rs
+```rs
 pub fn create_project(&mut self, metadata: String) -> Project
 ```
 - Add Offer to Project
-``rs
+```rs
 pub fn add_project_offer(
         &mut self,
         id: ProjectId,
@@ -222,10 +222,10 @@ pub fn add_project_offer(
     ) -> Vec<Offer>
 ```
 - Remove Offer from Project
-``rs
+```rs
 pub fn remove_project_offer(&mut self, id: ProjectId, offer_id: String) -> Vec<Offer>
 ```
 - Buy Offer
-``rs
+```rs
 pub fn buy_offer(&mut self, project_id: ProjectId, offer_id: String) -> Void
 ```
