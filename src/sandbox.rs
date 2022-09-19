@@ -296,6 +296,7 @@ impl Contract {
     } 
 
     // Approve Project, Release all money to project owner
+    #[payable]
     pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) {
         let project = self.projects.get(&id);
         assert!(project.is_some(), "Project is not exist!");
@@ -355,4 +356,12 @@ impl Contract {
     // Add Project to watchlist
 
     // Get all bought offers of a project
+
+    // Get list of projects that user funded
+
+    // Get list of projects that user watched
+
+    // Get list of pledgers of a project
+
+    // Get list of watcher of a project
 }
