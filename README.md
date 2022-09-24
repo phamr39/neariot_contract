@@ -195,23 +195,23 @@ cargo test --package status-message -- --nocapture
 ```
 # Contract Method
 
-- Get User Information by AccountId
+- [User] Get User Information by AccountId
 ```rs
 pub fn get_user(&mut self, user_id: AccountId) -> ProjectUser
 ```
-- Get Project Information by ProjectId
-```rs
-pub fn get_project(&mut self, id: ProjectId) -> Project
-```
-- Get Project Information by Creator AccountId
+- [User] Get Project Information by Creator AccountId
 ```rs
 pub fn get_user_projects_created(&mut self, id: AccountId) -> Project
 ```
-- Create Project. Each user can only create one project
+- [Project] Get Project Information by ProjectId
+```rs
+pub fn get_project(&mut self, id: ProjectId) -> Project
+```
+- [Project] Create Project. Each user can only create one project
 ```rs
 pub fn create_project(&mut self, metadata: String) -> Project
 ```
-- Add Offer to Project
+- [Project] Add Offer to Project
 ```rs
 pub fn add_project_offer(
         &mut self,
@@ -221,19 +221,23 @@ pub fn add_project_offer(
         metadata: String,
     ) -> Vec<Offer>
 ```
-- Remove Offer from Project
+- [Project] Remove Offer from Project
 ```rs
 pub fn remove_project_offer(&mut self, id: ProjectId, offer_id: String) -> Vec<Offer>
 ```
-- Update project metadata
+- [Project] Update project metadata
 ```rs
 pub fn update_project(&mut self, id: ProjectId, metadata: String) -> Project
 ```
-- Buy Offer
+- [Project] Buy Offer
 ```rs
 pub fn buy_offer(&mut self, project_id: ProjectId, offer_id: String) -> Void
 ```
-- Approve Project, Release all money to project owner
+- [Project] Approve Project, Release all money to project owner
 ```rs
-pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> Project
+pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String)
+```
+- [Project] Reject Project, Cashback remain money to pledger
+```rs
+pub fn reject_project(&mut self, id: ProjectId, rate: u32, metadata: String)
 ```
