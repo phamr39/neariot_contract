@@ -26,4 +26,5 @@ near call neariot_test2.testnet create_project '{"metadata": "HAHJDGSJAgjsafghja
 near call neariot_test2.testnet get_user_projects_created '{"id": "hieutest1.testnet"}' --accountId neariot_test2.testnet 
 near call neariot_test2.testnet get_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MDE0MDU2MjI4ODg1NDgz"}' --accountId neariot_test2.testnet 
 near call neariot_test2.testnet add_project_offer '{"id":"aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MDE0MDU2MjI4ODg1NDgz", "price":1, "expires_at":1664014557681,"metadata":"1"}' --accountId hieutest1.testnet 
-near call neariot_test2.testnet remove_project_offer '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MDE0MDU2MjI4ODg1NDgz", "offer_id": "adssdasad"}' --accountId hieutest1.testnet 
+near call neariot_test2.testnet remove_project_offer '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MDE0MDU2MjI4ODg1NDgz", "offer_id": "OF_1664017845791869975"}' --accountId hieutest1.testnet 
+near call neariot_test2.testnet update_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MDE0MDU2MjI4ODg1NDgz", "metadata": "Mot con vit xoe ra hai cai canh"}' --accountId hieutest1.testnet 

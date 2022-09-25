@@ -239,7 +239,7 @@ impl Contract {
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
         assert!(
-            project_data.owner != env::signer_account_id(),
+            project_data.owner == env::signer_account_id(),
             "You are not the owner of this project!"
         );
         project_data.metadata = metadata;
