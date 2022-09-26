@@ -40,6 +40,11 @@ Install dependencies
 npm install
 ```
 
+Log to console:
+```rs
+env::log_str(&format!("User Data: {:?}", user_data));
+```
+
 ## Quick Start
 To run this project locally:
 
@@ -194,7 +199,7 @@ To test run:
 cargo test --package status-message -- --nocapture
 ```
 # Contract Method
-
+## User
 - [User] Get User Information by AccountId
 ```rs
 pub fn get_user(&mut self, user_id: AccountId) -> ProjectUser
@@ -203,6 +208,16 @@ pub fn get_user(&mut self, user_id: AccountId) -> ProjectUser
 ```rs
 pub fn get_user_projects_created(&mut self, id: AccountId) -> Project
 ```
+- [User] Get list of projects that user funded
+```rs
+pub fn get_projects_funded(&self) -> Vec<Project>
+```
+- [User] Get list of projects that user watched
+```rs
+pub fn get_projects_watched(&self) -> Vec<Project>
+```
+
+## Project
 - [Project] Get Project Information by ProjectId
 ```rs
 pub fn get_project(&mut self, id: ProjectId) -> Project
@@ -235,9 +250,25 @@ pub fn buy_offer(&mut self, project_id: ProjectId, offer_id: String) -> Void
 ```
 - [Project] Approve Project, Release all money to project owner
 ```rs
-pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String)
+pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> Void
 ```
 - [Project] Reject Project, Cashback remain money to pledger
 ```rs
-pub fn reject_project(&mut self, id: ProjectId, rate: u32, metadata: String)
+pub fn reject_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> Void
+```
+- [Project] Add Project to watchlist
+```rs
+pub fn add_to_watchlist(&mut self, id: ProjectId) -> Void
+```
+- [Project] Get all bought offers of a project
+```rs
+pub fn get_bought_offers(&self, id: ProjectId) -> Vec<BoughtOffer>
+```
+- [Project] Get list of pledgers of a project
+```rs
+pub fn get_pledgers(&self, id: ProjectId) -> Vec<ProjectUser>
+```
+- [Project] Get list of watcher of a project
+```rs
+pub fn get_watchers(&self, id: ProjectId) -> Vec<ProjectUser>
 ```

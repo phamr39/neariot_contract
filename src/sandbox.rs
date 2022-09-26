@@ -434,14 +434,86 @@ impl Contract {
     }
 
     // Add Project to watchlist
+    pub fn add_to_watchlist(&mut self, id: ProjectId) {
+        let mut user = self.users.get(&env::signer_account_id());
+        // assert!(user.is_some(), "User is not exist!");
+        if !user.is_some() {
+            // Create new user
+            let new_user = ProjectUser::new();
+            self.users.insert(&env::signer_account_id(), &new_user);
+            user = self.users.get(&env::signer_account_id());
+        }
+        let mut user_data = user.unwrap();
+        user_data.projects_watched.push(id.clone());
+        self.users.insert(&env::signer_account_id(), &user_data);
+    }
 
     // Get all bought offers of a project
+    pub fn get_bought_offers(&self, id: ProjectId) -> Vec<BoughtOffer> {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let project_data = project.unwrap();
+        return project_data.bought_offers;
+    }
 
     // Get list of projects that user funded
+    pub fn get_projects_funded(&self) -> Vec<Project> {
+        let user = self.users.get(&env::signer_account_id());
+        assert!(user.is_some(), "User did not pledge any project!");
+        let user_data = user.unwrap();
+        let mut projects = vec![];
+        for id in user_data.projects_funded.iter() {
+            let project = self.projects.get(id);
+            if project.is_some() {
+                projects.push(project.unwrap());
+            }
+        }
+        return projects;
+    }
 
     // Get list of projects that user watched
+    pub fn get_projects_watched(&self) -> Vec<Project> {
+        let user = self.users.get(&env::signer_account_id());
+        assert!(user.is_some(), "User is not watching any project!");
+        let user_data = user.unwrap();
+        let mut projects = vec![];
+        for id in user_data.projects_watched.iter() {
+            let project = self.projects.get(id);
+            if project.is_some() {
+                projects.push(project.unwrap());
+            }
+        }
+        return projects;
+    }
 
     // Get list of pledgers of a project
 
+    pub fn get_pledgers(&self, id: ProjectId) -> Vec<ProjectUser> {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let project_data = project.unwrap();
+        let mut pledgers = vec![];
+        for id in project_data.pledgers.iter() {
+            let pledger = self.users.get(id);
+            if pledger.is_some() {
+                pledgers.push(pledger.unwrap());
+            }
+        }
+        return pledgers;
+    }
+
     // Get list of watcher of a project
+    pub fn get_watchers(&self, id: ProjectId) -> Vec<ProjectUser> {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let project_data = project.unwrap();
+        let mut watchers = vec![];
+        for id in project_data.watchers.iter() {
+            let watcher = self.users.get(id);
+            if watcher.is_some() {
+                watchers.push(watcher.unwrap());
+            }
+        }
+        return watchers;
+    }
 }
