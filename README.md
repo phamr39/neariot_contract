@@ -260,6 +260,10 @@ pub fn reject_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> 
 ```rs
 pub fn add_to_watchlist(&mut self, id: ProjectId) -> Void
 ```
+- [Project] Remove Project from watchlist
+```rs
+pub fn remove_from_watchlist(&mut self, id: ProjectId) -> Void
+```
 - [Project] Get all bought offers of a project
 ```rs
 pub fn get_bought_offers(&self, id: ProjectId) -> Vec<BoughtOffer>

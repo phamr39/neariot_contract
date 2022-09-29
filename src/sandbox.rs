@@ -114,8 +114,7 @@ impl ProjectUser {
 
 #[near_bindgen]
 impl Contract {
-
-    pub fn join (&mut self) {
+    pub fn join(&mut self) {
         let user_id = env::signer_account_id();
         let existed_user = self.users.get(&user_id);
         if existed_user.is_none() {
@@ -146,10 +145,7 @@ impl Contract {
 
         let project_id = user.projects_created;
 
-        assert!(
-            project_id.len() > 0,
-            "User has not created any project!"
-        );
+        assert!(project_id.len() > 0, "User has not created any project!");
 
         let project = self.projects.get(&project_id);
 
@@ -273,8 +269,8 @@ impl Contract {
             "Offer is expired!"
         );
         assert!(
-            &env::signer_account_id() == &project_data.owner,
-            "You are the owner of this project!"
+            &env::signer_account_id() != &project_data.owner,
+            "You are the owner of this projecty!"
         );
         // Check if user's deposite is enough
         if env::attached_deposit() < offer.price {
@@ -315,7 +311,7 @@ impl Contract {
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
         assert!(
-            project_data.owner == env::signer_account_id(),
+            project_data.owner != env::signer_account_id(),
             "You are the owner of this project!"
         );
         // Get offer Information
@@ -375,7 +371,7 @@ impl Contract {
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
         assert!(
-            project_data.owner == env::signer_account_id(),
+            project_data.owner != env::signer_account_id(),
             "You are the owner of this project!"
         );
         // Get offer Information
@@ -446,6 +442,12 @@ impl Contract {
         let mut user_data = user.unwrap();
         user_data.projects_watched.push(id.clone());
         self.users.insert(&env::signer_account_id(), &user_data);
+        // Add watcher list to project
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let mut project_data = project.unwrap();
+        project_data.watchers.push(env::signer_account_id());
+        self.projects.insert(&id, &project_data);
     }
 
     // Get all bought offers of a project
@@ -515,5 +517,42 @@ impl Contract {
             }
         }
         return watchers;
+    }
+    
+    // Remove Project from watchlist
+    pub fn remove_from_watchlist(&mut self, id: ProjectId) {
+        let user = self.users.get(&env::signer_account_id());
+        assert!(user.is_some(), "User is not exist!");
+        let mut user_data = user.unwrap();
+        let mut index = 0;
+        for data in user_data.projects_watched.iter() {
+            if data == &id {
+                break;
+            }
+            index += 1;
+        }
+        if index >= user_data.projects_watched.len() {
+            // Project is not exist in watchlist
+            assert!(true, "Project is not exist in watchlist!");
+        }
+        user_data.projects_watched.remove(index);
+        self.users.insert(&env::signer_account_id(), &user_data);
+        // Remove watcher list from project
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let mut project_data = project.unwrap();
+        let mut index = 0;
+        for data in project_data.watchers.iter() {
+            if data == &env::signer_account_id() {
+                break;
+            }
+            index += 1;
+        }
+        if index >= project_data.watchers.len() {
+            // Project is not exist in watchlist
+            assert!(true, "Project is not exist in watchlist!");
+        }
+        project_data.watchers.remove(index);
+        self.projects.insert(&id, &project_data);
     }
 }
