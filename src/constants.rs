@@ -12,9 +12,7 @@ pub type OfferId = String;
 #[derive(BorshStorageKey, BorshSerialize)]
 pub(crate) enum StorageKey {
     ClusterPerOwner,
-    Cluster,
-    ClusterMetadata,
-    ClusterPerOwnerInner { id: AccountId },
     Project,
     User,
+    Recommendations,
 }

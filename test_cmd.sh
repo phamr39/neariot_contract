@@ -49,3 +49,5 @@ near call neariot_contract.testnet get_bought_offers '{"id": "aGlldXRlc3QxLnRlc3
 near call neariot_contract.testnet get_pledgers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
 near call neariot_contract.testnet get_watchers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
 near call neariot_contract.testnet remove_from_watchlist '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
+
+near call neariot_contract.testnet get_recommended_projects "{}" --accountId hieutest1.testnet
