@@ -21,12 +21,12 @@ neariot_test2.testnet
 hieutest1.testnet
 
 
-near call neariot_contract.testnet new "{}" --accountId neariot_test2.testnet
+near call neariot_contract.testnet new "{}" --accountId neariot_contract.testnet
 near call neariot_contract.testnet join "{}" --accountId hieutest1.testnet
 near call neariot_contract.testnet get_user '{"user_id": "hieutest1.testnet"}' --accountId hieutest1.testnet 
 near call neariot_contract.testnet create_project '{"metadata": "HAHJDGSJAgjsafghjasgdjasgdjghajkdjksahdjaskdj"}' --accountId hieutest1.testnet 
 near call neariot_contract.testnet get_user_projects_created '{"id": "hieutest1.testnet"}' --accountId neariot_contract.testnet 
-near call neariot_contract.testnet get_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
+near call neariot_contract.testnet get_project '{"id": "dGVzdF9oaWV1MS50ZXN0bmV0X3Byb2plY3RfMTY2NjgwMzYxODI0ODMyNDU0OQ=="}' --accountId neariot_test2.testnet 
 near call neariot_contract.testnet add_project_offer '{"id":"aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "price":1, "expires_at":1664014557681,"metadata":"1"}' --accountId hieutest1.testnet 
 near call neariot_contract.testnet remove_project_offer '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "offer_id": "OF_1664017845791869975"}' --accountId hieutest1.testnet 
 near call neariot_contract.testnet update_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "metadata": "Mot con vit xoe ra hai cai canh"}' --accountId hieutest1.testnet 
