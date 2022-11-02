@@ -276,3 +276,7 @@ pub fn get_pledgers(&self, id: ProjectId) -> Vec<ProjectUser>
 ```rs
 pub fn get_watchers(&self, id: ProjectId) -> Vec<ProjectUser>
 ```
+- [Project] Get list of recommends project (last 20 new projects)
+```rs
+pub fn get_rcm_projects(&self) -> Vec<Project>
+```

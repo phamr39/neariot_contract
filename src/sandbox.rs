@@ -518,7 +518,7 @@ impl Contract {
         }
         return watchers;
     }
-    
+
     // Remove Project from watchlist
     pub fn remove_from_watchlist(&mut self, id: ProjectId) {
         let user = self.users.get(&env::signer_account_id());
@@ -554,5 +554,17 @@ impl Contract {
         }
         project_data.watchers.remove(index);
         self.projects.insert(&id, &project_data);
+    }
+
+    pub fn get_rcm_projects(&self) -> Vec<Project> {
+        let mut projects = vec![];
+        let list_projects = self.projects.to_vec();
+        for i in 0..(list_projects.len()) {
+            if projects.len() > 20 {
+                break;
+            }
+            projects.push(list_projects[list_projects.len() - i - 1].1.clone());
+        }
+        return projects;
     }
 }
