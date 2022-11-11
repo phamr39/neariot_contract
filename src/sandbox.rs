@@ -65,6 +65,7 @@ pub struct Project {
     pub total_offers_completed: u32,  // Total offers completed
     pub total_offers_cancled: u32,    // Total offers cancled
     pub bought_offers: Vec<BoughtOffer>,
+    pub milestones: String,
 }
 
 impl Project {
@@ -84,6 +85,7 @@ impl Project {
             total_offers_completed: 0,
             total_offers_cancled: 0,
             bought_offers: vec![],
+            milestones: String::from(""),
         }
     }
 }
@@ -566,5 +568,20 @@ impl Contract {
             projects.push(list_projects[list_projects.len() - i - 1].1.clone());
         }
         return projects;
+    }
+
+    pub fn get_milestone(&self, id: ProjectId) -> String {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let project_data = project.unwrap();
+        return project_data.milestones;
+    }
+
+    pub fn set_milestonr(&mut self, id: ProjectId, milestones: String) {
+        let project = self.projects.get(&id);
+        assert!(project.is_some(), "Project is not exist!");
+        let mut project_data = project.unwrap();
+        project_data.milestones = milestones;
+        self.projects.insert(&id, &project_data);
     }
 }

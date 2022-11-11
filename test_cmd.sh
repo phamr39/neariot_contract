@@ -27,9 +27,9 @@ near call neariot_contract.testnet get_user '{"user_id": "hieutest1.testnet"}' -
 near call neariot_contract.testnet create_project '{"metadata": "HAHJDGSJAgjsafghjasgdjasgdjghajkdjksahdjaskdj"}' --accountId hieutest1.testnet 
 near call neariot_contract.testnet get_user_projects_created '{"id": "hieutest1.testnet"}' --accountId neariot_contract.testnet 
 near call neariot_contract.testnet get_project '{"id": "dGVzdF9oaWV1MS50ZXN0bmV0X3Byb2plY3RfMTY2NjgwMzYxODI0ODMyNDU0OQ=="}' --accountId neariot_test2.testnet 
-near call neariot_contract.testnet add_project_offer '{"id":"aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "price":1, "expires_at":1664014557681,"metadata":"1"}' --accountId hieutest1.testnet 
-near call neariot_contract.testnet remove_project_offer '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "offer_id": "OF_1664017845791869975"}' --accountId hieutest1.testnet 
-near call neariot_contract.testnet update_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "metadata": "Mot con vit xoe ra hai cai canh"}' --accountId hieutest1.testnet 
+near call neariot_contract.testnet add_project_offer '{"id":"bmVhcmlvdF90ZXN0Mi50ZXN0bmV0X3Byb2plY3RfMTY2NzQxNTM1MjM4MjI0OTg1Mw==", "price":1, "expires_at":1664014557681,"metadata":"1"}' --accountId neariot_test2.testnet
+near call neariot_contract.testnet remove_project_offer '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2", "offer_id": "OF_1664017845791869975"}' --accountId hieutest1.testnet 
+near call neariot_contract.testnet update_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2", "metadata": "Mot con vit xoe ra hai cai canh"}' --accountId hieutest1.testnet 
 
 neariot_contract.testnet
 neutrinotest1.testnet
@@ -40,13 +40,16 @@ near call neariot_contract.testnet new "{}" --accountId neariot_contract.testnet
 
 near call neariot_contract.testnet get_projects_funded "{}" --accountId hieutest1.testnet
 near call neariot_contract.testnet get_projects_watched "{}" --accountId neariot_test2.testnet
-near call neariot_contract.testnet add_to_watchlist '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
+near call neariot_contract.testnet add_to_watchlist '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2"}' --accountId neariot_test2.testnet 
 near call neariot_contract.testnet get_user '{"user_id": "neariot_test2.testnet"}' --accountId neariot_test2.testnet 
-near call neariot_contract.testnet buy_offer '{"project_id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "offer_id": "OF_1664208112775238844"}' --accountId neutrinotest1.testnet --deposit 1
-near call neariot_contract.testnet approve_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "rate": 5, "metadata":"Approve Project, Release all money to project owner"}' --accountId neutrinotest1.testnet
-near call neariot_contract.testnet reject_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5", "rate": 5, "metadata":"Reject Project, Cashback remain money to pledger"}' --accountId lottery_game.testnet
-near call neariot_contract.testnet get_bought_offers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
-near call neariot_contract.testnet get_pledgers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
-near call neariot_contract.testnet get_watchers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
-near call neariot_contract.testnet remove_from_watchlist '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY0MjA4MDY1Njc2NDM2MjE5"}' --accountId neariot_test2.testnet 
+near call neariot_contract.testnet buy_offer '{"project_id": "bmVhcmlvdF90ZXN0Mi50ZXN0bmV0X3Byb2plY3RfMTY2NzQxNTM1MjM4MjI0OTg1Mw==", "offer_id": "OF_1668171847376699735"}' --accountId neutrino.testnet --deposit 1
+near call neariot_contract.testnet approve_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2", "rate": 5, "metadata":"Approve Project, Release all money to project owner"}' --accountId neutrinotest1.testnet
+near call neariot_contract.testnet reject_project '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2", "rate": 5, "metadata":"Reject Project, Cashback remain money to pledger"}' --accountId lottery_game.testnet
+near call neariot_contract.testnet get_bought_offers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2"}' --accountId neariot_test2.testnet 
+near call neariot_contract.testnet get_pledgers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2"}' --accountId neariot_test2.testnet 
+near call neariot_contract.testnet get_watchers '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2"}' --accountId neariot_test2.testnet 
+near call neariot_contract.testnet remove_from_watchlist '{"id": "aGlldXRlc3QxLnRlc3RuZXRfcHJvamVjdF8xNjY3MzkzODM2Njc5OTE0ODY2"}' --accountId neariot_test2.testnet 
 near call neariot_contract.testnet get_rcm_projects "{}" --accountId neariot_contract.testnet
+
+near call neariot_contract.testnet get_milestone '{"id": "bmVhcmlvdF90LnRlc3RuZXRfcHJvamVjdF8xNjY4MTc2ODk3MjM5MDU4MDUy"}' --accountId neariot_t.testnet
+near call neariot_contract.testnet set_milestonr '{"id": "bmVhcmlvdF90LnRlc3RuZXRfcHJvamVjdF8xNjY4MTc2ODk3MjM5MDU4MDUy", "milestones": "1668177084700"}' --accountId neariot_t.testnet
