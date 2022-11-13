@@ -1,3 +1,5 @@
+use std::num::Wrapping;
+
 use near_sdk::Promise;
 // use near_sdk::{json_types::U128, near_bindgen, AccountId};
 
@@ -309,6 +311,10 @@ impl Contract {
     // Approve Project, Release all money to project owner
     #[payable]
     pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) {
+        assert!(
+            rate < 1,
+            "Minimum rate is 1, please check your rate again!"
+        );
         let project = self.projects.get(&id);
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
@@ -330,6 +336,10 @@ impl Contract {
         }
         // Update Bought offer and project Rate
         let mut bought_offer = project_data.bought_offers.get(index).unwrap().clone();
+        assert!(
+            bought_offer.rate == 0,
+            "This offer has been completed!"
+        );
         bought_offer.rate = rate;
         bought_offer.metadata = metadata;
         project_data.bought_offers[index] = bought_offer.clone();
@@ -355,12 +365,12 @@ impl Contract {
         }
         // Calculate money for project owner
         let offer = offers.get(index).unwrap();
-        let money = offer.price * (INVESTOR_PROTECT_PERCENT - OFFER_FEES_PERCENT) / 100;
-        project_data.total_pledge_locked -= money.clone();
-        user_data.total_spent += money.clone();
+        let money = Wrapping(offer.price * (INVESTOR_PROTECT_PERCENT - OFFER_FEES_PERCENT) / 100);
+        project_data.total_pledge_locked = (Wrapping(project_data.total_pledge_locked) - money).0;
+        user_data.total_spent += money.clone().0;
         // Release remaining money to project
         let project_owner = project_data.owner.clone();
-        Promise::new(project_owner).transfer(money);
+        Promise::new(project_owner).transfer(money.0);
         // Update Project and User Infor
         self.users.insert(&env::signer_account_id(), &user_data);
         self.projects.insert(&id, &project_data);
@@ -369,6 +379,10 @@ impl Contract {
     // Reject Project, Cashback remain money to pledger
     #[payable]
     pub fn reject_project(&mut self, id: ProjectId, rate: u32, metadata: String) {
+        assert!(
+            rate >= 1,
+            "Minimum rate is 1, please check your rate again!"
+        );
         let project = self.projects.get(&id);
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
@@ -394,6 +408,10 @@ impl Contract {
         }
         // Update Bought offer and project Rate
         let mut bought_offer = project_data.bought_offers.get(index).unwrap().clone();
+        assert!(
+            bought_offer.rate == 0,
+            "This offer has been completed!"
+        );
         // Get Offer Information, check if bought offer is not exists in offer list
         let offers = project_data.offers.clone();
         let mut index = 0;
@@ -419,12 +437,13 @@ impl Contract {
         project_data.total_offers_cancled += 1;
         // Calculate money for project owner
         let offer = offers.get(index).unwrap();
-        let money = offer.price * (INVESTOR_PROTECT_PERCENT - 1) / 100;
-        project_data.total_pledge_locked -= money.clone();
+        // let money = (offer.price * (INVESTOR_PROTECT_PERCENT - 1)) / 100;
+        // project_data.total_pledge_locked -= money.clone();
+        let money = Wrapping(offer.price * (INVESTOR_PROTECT_PERCENT - 1) / 100);
+        project_data.total_pledge_locked = (Wrapping(project_data.total_pledge_locked) - money).0;
         user_data.projects_completed.push(id.clone());
-
         // Cashback remaining money to pledger
-        Promise::new(env::signer_account_id()).transfer(money);
+        Promise::new(env::signer_account_id()).transfer(money.0);
         // Update Project Infor
         self.projects.insert(&id, &project_data);
         self.users.insert(&env::signer_account_id(), &user_data);
@@ -577,10 +596,14 @@ impl Contract {
         return project_data.milestones;
     }
 
-    pub fn set_milestonr(&mut self, id: ProjectId, milestones: String) {
+    pub fn set_milestone(&mut self, id: ProjectId, milestones: String) {
         let project = self.projects.get(&id);
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
+        assert!(
+            project_data.owner != env::signer_account_id(),
+            "You are the owner of this project!"
+        );
         project_data.milestones = milestones;
         self.projects.insert(&id, &project_data);
     }

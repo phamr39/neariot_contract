@@ -282,7 +282,7 @@ pub fn get_rcm_projects(&self) -> Vec<Project>
 ```
 - [Project] Set milestone of a project
 ```rs
-pub fn set_milestonr(&self, id: ProjectId, milestones: String) -> Vec<Project>
+pub fn set_milestone(&self, id: ProjectId, milestones: String) -> Vec<Project>
 ```
 - [Project] Get milestone of a project
 ```rs
