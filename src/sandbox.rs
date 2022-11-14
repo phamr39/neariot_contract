@@ -264,7 +264,7 @@ impl Contract {
             index += 1;
         }
         if index >= offers.len() {
-            assert!(true, "Offer is not exist!");
+            assert!(false, "Offer is not exist!");
         }
         // Validate Offer and User role
         let offer = offers.get(index).unwrap();
@@ -278,7 +278,7 @@ impl Contract {
         );
         // Check if user's deposite is enough
         if env::attached_deposit() < offer.price {
-            assert!(true, "Not enough money!");
+            assert!(false, "Not enough money!");
         }
         // Update User Info
         let mut user = self.users.get(&env::signer_account_id());
@@ -293,15 +293,15 @@ impl Contract {
         user_data.projects_funded = user_projects_funded;
         // Transfer a part of money to project owner
         let project_owner = project_data.owner.clone();
-        let money = offer.price * (100 - INVESTOR_PROTECT_PERCENT) / 100;
-        user_data.total_spent += money.clone();
-        Promise::new(project_owner).transfer(money);
+        let money = Wrapping(offer.price * (100 - INVESTOR_PROTECT_PERCENT) / 100);
+        user_data.total_spent = (Wrapping(user_data.total_spent) + money.clone()).0;
+        Promise::new(project_owner).transfer(money.0);
         // Update Project Info
         let bought_offer = BoughtOffer::new(offer_id, String::from(""), env::signer_account_id());
         project_data.bought_offers.push(bought_offer);
         project_data.pledgers.push(env::signer_account_id());
         project_data.total_pledge += offer.price;
-        project_data.total_pledge_locked += offer.price * INVESTOR_PROTECT_PERCENT / 100;
+        project_data.total_pledge_locked = (Wrapping(project_data.total_pledge_locked) + Wrapping(offer.price * INVESTOR_PROTECT_PERCENT / 100)).0;
         project_data.total_offers_bought += 1;
         project_data.offers = offers;
         self.users.insert(&env::signer_account_id(), &user_data);
@@ -312,7 +312,7 @@ impl Contract {
     #[payable]
     pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) {
         assert!(
-            rate < 1,
+            rate >= 1,
             "Minimum rate is 1, please check your rate again!"
         );
         let project = self.projects.get(&id);
@@ -361,7 +361,7 @@ impl Contract {
         }
         if index >= offers.len() {
             // Offer is exist in Bought offer but not exist in Offer
-            assert!(true, "SB0001, Something went wrong!");
+            assert!(false, "SB0001, Something went wrong!");
         }
         // Calculate money for project owner
         let offer = offers.get(index).unwrap();
@@ -404,7 +404,7 @@ impl Contract {
         }
         if index >= project_data.bought_offers.len() {
             // User ID is not exist in pledged list
-            assert!(true, "User is not exist in pledged list!");
+            assert!(false, "User is not exist in pledged list!");
         }
         // Update Bought offer and project Rate
         let mut bought_offer = project_data.bought_offers.get(index).unwrap().clone();
@@ -423,7 +423,7 @@ impl Contract {
         }
         if index >= offers.len() {
             // Offer is exist in Bought offer but not exist in Offer
-            assert!(true, "SB00005, Something went wrong!");
+            assert!(false, "SB00005, Something went wrong!");
         }
         bought_offer.rate = rate;
         bought_offer.metadata = metadata;
@@ -461,13 +461,18 @@ impl Contract {
             user = self.users.get(&env::signer_account_id());
         }
         let mut user_data = user.unwrap();
+        for project in user_data.projects_watched.iter() {
+            if project == &id {
+                assert!(false, "Project is already in watchlist!");
+            }
+        }
         user_data.projects_watched.push(id.clone());
-        self.users.insert(&env::signer_account_id(), &user_data);
         // Add watcher list to project
         let project = self.projects.get(&id);
         assert!(project.is_some(), "Project is not exist!");
         let mut project_data = project.unwrap();
         project_data.watchers.push(env::signer_account_id());
+        self.users.insert(&env::signer_account_id(), &user_data);
         self.projects.insert(&id, &project_data);
     }
 
@@ -554,7 +559,7 @@ impl Contract {
         }
         if index >= user_data.projects_watched.len() {
             // Project is not exist in watchlist
-            assert!(true, "Project is not exist in watchlist!");
+            assert!(false, "Project is not exist in watchlist!");
         }
         user_data.projects_watched.remove(index);
         self.users.insert(&env::signer_account_id(), &user_data);
@@ -571,7 +576,7 @@ impl Contract {
         }
         if index >= project_data.watchers.len() {
             // Project is not exist in watchlist
-            assert!(true, "Project is not exist in watchlist!");
+            assert!(false, "Project is not exist in watchlist!");
         }
         project_data.watchers.remove(index);
         self.projects.insert(&id, &project_data);
