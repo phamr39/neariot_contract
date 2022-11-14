@@ -40,6 +40,11 @@ Install dependencies
 npm install
 ```
 
+Log to console:
+```rs
+env::log_str(&format!("User Data: {:?}", user_data));
+```
+
 ## Quick Start
 To run this project locally:
 
@@ -119,6 +124,7 @@ source neardev/dev-account.env
 You can tell if the environment variable is set correctly if your command line prints the account name after this command:
 ```bash
 echo $CONTRACT_NAME
+
 ```
 
 The next command will call the contract's `set_status` method:
@@ -191,4 +197,94 @@ near view YOUR_ACCOUNT_NAME get_status '{"account_id": "YOUR_ACCOUNT_NAME"}'
 To test run:
 ```bash
 cargo test --package status-message -- --nocapture
+```
+# Contract Method
+## User
+- [User] Get User Information by AccountId
+```rs
+pub fn get_user(&mut self, user_id: AccountId) -> ProjectUser
+```
+- [User] Get Project Information by Creator AccountId
+```rs
+pub fn get_user_projects_created(&mut self, id: AccountId) -> Project
+```
+- [User] Get list of projects that user funded
+```rs
+pub fn get_projects_funded(&self) -> Vec<Project>
+```
+- [User] Get list of projects that user watched
+```rs
+pub fn get_projects_watched(&self) -> Vec<Project>
+```
+
+## Project
+- [Project] Get Project Information by ProjectId
+```rs
+pub fn get_project(&mut self, id: ProjectId) -> Project
+```
+- [Project] Create Project. Each user can only create one project
+```rs
+pub fn create_project(&mut self, metadata: String) -> Project
+```
+- [Project] Add Offer to Project
+```rs
+pub fn add_project_offer(
+        &mut self,
+        id: ProjectId,
+        price: Balance,
+        expires_at: u64,
+        metadata: String,
+    ) -> Vec<Offer>
+```
+- [Project] Remove Offer from Project
+```rs
+pub fn remove_project_offer(&mut self, id: ProjectId, offer_id: String) -> Vec<Offer>
+```
+- [Project] Update project metadata
+```rs
+pub fn update_project(&mut self, id: ProjectId, metadata: String) -> Project
+```
+- [Project] Buy Offer
+```rs
+pub fn buy_offer(&mut self, project_id: ProjectId, offer_id: String) -> Void
+```
+- [Project] Approve Project, Release all money to project owner
+```rs
+pub fn approve_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> Void
+```
+- [Project] Reject Project, Cashback remain money to pledger
+```rs
+pub fn reject_project(&mut self, id: ProjectId, rate: u32, metadata: String) -> Void
+```
+- [Project] Add Project to watchlist
+```rs
+pub fn add_to_watchlist(&mut self, id: ProjectId) -> Void
+```
+- [Project] Remove Project from watchlist
+```rs
+pub fn remove_from_watchlist(&mut self, id: ProjectId) -> Void
+```
+- [Project] Get all bought offers of a project
+```rs
+pub fn get_bought_offers(&self, id: ProjectId) -> Vec<BoughtOffer>
+```
+- [Project] Get list of pledgers of a project
+```rs
+pub fn get_pledgers(&self, id: ProjectId) -> Vec<ProjectUser>
+```
+- [Project] Get list of watcher of a project
+```rs
+pub fn get_watchers(&self, id: ProjectId) -> Vec<ProjectUser>
+```
+- [Project] Get list of recommends project (last 20 new projects)
+```rs
+pub fn get_rcm_projects(&self) -> Vec<Project>
+```
+- [Project] Set milestone of a project
+```rs
+pub fn set_milestone(&self, id: ProjectId, milestones: String) -> Vec<Project>
+```
+- [Project] Get milestone of a project
+```rs
+pub fn get_milestone(&self, id: ProjectId) -> Vec<Project>
 ```
